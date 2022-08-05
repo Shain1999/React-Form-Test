@@ -1,24 +1,26 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import "./App.css";
+import OrderReferral from "./components/OrderReferral/OrderReferral";
+import RegistrationForm from "./components/RegistrationForm/RegistrationForm";
+export interface IUserData {
+  fullName: string;
+  age: number;
+}
 
 function App() {
+  const [registerCompleted, setRegisterCompleted] = useState<boolean>(false);
+  const [userData, setUserData] = useState<IUserData>({ fullName: "", age: 0 });
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      {!registerCompleted && (
+        <RegistrationForm
+          setRegisterCompleted={setRegisterCompleted}
+          setUserData={setUserData}
+        />
+      )}
+      {registerCompleted && (
+        <OrderReferral fullName={userData.fullName} age={userData.age} />
+      )}
     </div>
   );
 }

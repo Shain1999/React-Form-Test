@@ -1,0 +1,17 @@
+.submitBtn {
+    background-color: #8B85D7;
+    width: 206px;
+    height: 44px;
+    font-size: 20px;
+    color: white;
+    border-radius: 10px;
+    outline: none;
+    border: none;
+    transition: all 200ms ease-in;
+
+    &:hover {
+        transform: scale(1.05);
+    }
+
+    cursor: pointer;
+}

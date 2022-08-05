@@ -1,0 +1,79 @@
+.container {
+    width: 536px;
+    height: fit-content;
+    padding-bottom: 2%;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    margin: 2% auto;
+    box-shadow: 0 0 1rem rgba(0, 0, 0, 0.1);
+    border-radius: 20px;
+
+}
+
+
+
+.inputs {
+    margin: 0 auto;
+    width: fit-content;
+    max-width: 540px;
+    text-align: left;
+    gap: 5px;
+    display: flex;
+    flex-direction: column;
+}
+
+.autoCompleteControlDiv {
+    display: flex;
+    justify-content: space-between;
+
+
+}
+
+.language {
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    margin-left: 5.5%;
+}
+
+.ddlControl {
+    margin: 0 auto;
+    width: 470px;
+    display: flex;
+    justify-content: space-between;
+}
+
+
+
+.btnControlDiv {
+    max-width: 540px;
+    display: flex;
+    width: fit-content;
+    margin: 0 6% auto;
+}
+
+#termsCheckBox {
+    width: 24px;
+}
+
+
+.textField {
+    border-color: #8B85D7;
+}
+
+.authTermsDiv {
+    max-width: 540px;
+    display: flex;
+    width: fit-content;
+    margin: 0 5.5% auto;
+
+    .termsData {
+        font-size: 12px;
+        width: 58ch;
+        text-align: left;
+        margin-left: 1%;
+
+    }
+
+}

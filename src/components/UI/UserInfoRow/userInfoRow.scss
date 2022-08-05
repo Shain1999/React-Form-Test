@@ -1,0 +1,29 @@
+.userInfoDiv {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: left;
+    width: fit-content;
+    margin-left: 6%;
+
+
+}
+
+.propText {
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 21px;
+    letter-spacing: 0px;
+    text-align: left;
+
+}
+
+.propValue {
+    padding-left: 10px;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 21px;
+    letter-spacing: 0px;
+    text-align: left;
+
+}
