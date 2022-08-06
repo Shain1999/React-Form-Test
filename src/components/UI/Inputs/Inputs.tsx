@@ -4,6 +4,7 @@ export interface IInputProps {
   labelText: string;
   onChangeHandler: ChangeEventHandler<HTMLInputElement>;
   errorMessage: string;
+  name:string;
 }
 // this component recives a text to show , on change handler for he input , and err message
 // this component returns a input field with desired props
@@ -12,6 +13,7 @@ function Inputs(props: IInputProps) {
     <>
       <label htmlFor="">{props.labelText}</label>
       <TextField
+      name={props.name}
         error={props.errorMessage == "" ? false : true}
         color="secondary"
         helperText={props.errorMessage}

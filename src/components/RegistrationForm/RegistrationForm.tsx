@@ -14,7 +14,7 @@ import {
   SvgIcon,
   TextField,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./registrationForm.scss";
 import logo from "../../assests/imgs/logo.png";
 import { Language } from "@mui/icons-material";
@@ -33,22 +33,34 @@ export interface IRegistrationFormProps {
   setRegisterCompleted: React.Dispatch<React.SetStateAction<boolean>>;
   setUserData: React.Dispatch<React.SetStateAction<IUserData>>;
 }
+export interface IDateOfBirth {
+  day: number;
+  mounth: number;
+  year: number;
+}
+export interface IUserRegistrationData {
+  firstName?: string;
+  lastName?: string;
+  socialNumber?: number;
+  dateOfBirth?: IDateOfBirth;
+  reasonForArrival?: string;
+  phoneNumber?: number;
+  HMO?: string;
+  city?: string;
+}
 
 function RegistrationForm(props: IRegistrationFormProps) {
-  // defining all states for user data
+  // defining user data
+  const [userData, setUserData] = useState<IUserRegistrationData>();
+  useEffect(() => {
+    // init birthdate to empty obj beacuse it did some bugs
+    let emptyBirthObj = { day: 0, mounth: 0, year: 0 };
+    setUserData((prev) => ({ ...prev, dateOfBirth: emptyBirthObj }));
+  }, []);
+  // defining all states that arent user data
   const [socialNumberType, setSocialNumberType] = useState<string>("ID");
-  const [socialNumber, setSocialNumber] = useState<number>();
   const [language, setLanguage] = useState<string>("EN");
   const [languageInput, setLanguageInput] = useState<string>("EN");
-  const [firstName, setFirstName] = useState<string>("");
-  const [lastName, setLastName] = useState<string>("");
-  const [daysValue, setDaysValue] = useState<number>(0);
-  const [mounthsValue, setMounthsValue] = useState<number>(0);
-  const [yearsValue, setYearsValue] = useState<number>(0);
-  const [reasonForArrival, setReasonForArrival] = useState<string>("");
-  const [phoneNumber, setPhoneNumber] = useState<string>("");
-  const [HMO, setHMO] = useState<string>("");
-  const [city, setCity] = useState<string>("");
   const [termsChecked, setTermsChecked] = useState<boolean>(false);
   // defining all err messages
   const [errMessageFirstName, setErrMessageFirstName] = useState<string>("");
@@ -59,14 +71,18 @@ function RegistrationForm(props: IRegistrationFormProps) {
   // this function calculate the age of the user
   const calcAge = () => {
     let today = new Date();
-    let age = today.getFullYear() - yearsValue;
-    if (today.getMonth() < mounthsValue) {
-      age--;
+    let userYear = userData?.dateOfBirth?.year;
+    let userMounth = userData?.dateOfBirth?.mounth;
+    if (userYear && userMounth) {
+      let age = today.getFullYear() - userYear;
+      if (today.getMonth() < userMounth) {
+        age--;
+      }
+      return age;
     }
-    return age;
   };
   // this function returns the full name
-  const getFullName = () => firstName + " " + lastName;
+  const getFullName = () => userData?.firstName + " " + userData?.lastName;
 
   // this function check if the the user filled all the data currectly and then route to the order referral page
   const onSubmitClick = () => {
@@ -80,11 +96,12 @@ function RegistrationForm(props: IRegistrationFormProps) {
       return;
     }
 
-    const userData = {
+    const userDataToSend: any = {
       fullName: getFullName(),
       age: calcAge(),
     };
-    props.setUserData(userData);
+
+    props.setUserData(userDataToSend);
     props.setRegisterCompleted(true);
   };
 
@@ -96,7 +113,9 @@ function RegistrationForm(props: IRegistrationFormProps) {
   function onlyNumbers(str: string) {
     return /^[0-9]+$/.test(str);
   }
-
+  const onChangeHandlerUserData = (e: any) => {
+    setUserData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
   // on change handler for the 1st name input ,updating the state and showing errors
   const handleFirstNameChange = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -105,7 +124,7 @@ function RegistrationForm(props: IRegistrationFormProps) {
       if (errMessageFirstName != "") {
         setErrMessageFirstName("");
       }
-      setFirstName(event.target.value);
+      onChangeHandlerUserData(event);
     } else {
       setErrMessageFirstName("only letters");
     }
@@ -117,7 +136,7 @@ function RegistrationForm(props: IRegistrationFormProps) {
       if (errMessageLastName != "") {
         setErrMessageLastName("");
       }
-      setLastName(event.target.value);
+      onChangeHandlerUserData(event);
     } else {
       setErrMessageLastName("only letters");
     }
@@ -131,7 +150,7 @@ function RegistrationForm(props: IRegistrationFormProps) {
       if (errMessageSocialNumber != "") {
         setErrMessageSocialNumber("");
       }
-      setSocialNumber(+event.target.value);
+      onChangeHandlerUserData(event);
     } else {
       setErrMessageSocialNumber("only numbers");
     }
@@ -142,43 +161,8 @@ function RegistrationForm(props: IRegistrationFormProps) {
     setSocialNumberType((event.target as HTMLInputElement).value);
   };
 
-  // on change handler for reason for arrival that updates the state
-  const handleReasonForArrivalChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setReasonForArrival(event.target.value);
-  };
-
-  // on change handler for hmo that updates the state
-  const handleHMOChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setHMO(event.target.value);
-  };
-
-  // on change handler for city that updates the state
-  const handleCityChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setCity(event.target.value);
-  };
-
-  // on change handler for days in birth day that updates the state
-  const handleDaysChange = (event: SelectChangeEvent) => {
-    setDaysValue(+event.target.value);
-  };
-
-  // on change handler for mounths in birth day that updates the state
-  const handleMountsChange = (event: SelectChangeEvent) => {
-    setMounthsValue(+event.target.value);
-  };
-
-  // on change handler for years in birth day that updates the state
-  const handleYearsChange = (event: SelectChangeEvent) => {
-    setYearsValue(+event.target.value);
-  };
-
-
-
   return (
     <>
-  
       <article className="container">
         <LanguageIcon
           languageInput={languageInput}
@@ -191,6 +175,7 @@ function RegistrationForm(props: IRegistrationFormProps) {
         <form action="">
           <div className="inputs">
             <Inputs
+              name="firstName"
               errorMessage={errMessageFirstName}
               onChangeHandler={handleFirstNameChange}
               labelText="First Name"
@@ -198,6 +183,7 @@ function RegistrationForm(props: IRegistrationFormProps) {
           </div>
           <div className="inputs">
             <Inputs
+              name="lastName"
               errorMessage={errMessageLastName}
               onChangeHandler={handleLastNameChange}
               labelText="Last Name"
@@ -213,41 +199,42 @@ function RegistrationForm(props: IRegistrationFormProps) {
           </div>
           <div className="inputs">
             <BirthDate
-              daysValue={daysValue}
-              mounthsValue={mounthsValue}
-              yearsValue={yearsValue}
+              setUserData={setUserData}
+              daysValue={userData?.dateOfBirth?.day}
+              mounthsValue={userData?.dateOfBirth?.mounth}
+              yearsValue={userData?.dateOfBirth?.year}
               labelText="Date Of Birth"
-              handleDaysChange={handleDaysChange}
-              handleMounthsChange={handleMountsChange}
-              handleYearsChange={handleYearsChange}
             ></BirthDate>
           </div>
           <div className="inputs">
             <SelectInput
+              name="reasonForArrival"
               labelText="Reason for arrival for examination"
               placeholderText="choose reason for arrival"
               menuItems={reasonForArrivalArray}
-              value={reasonForArrival}
-              onChangeHandler={handleReasonForArrivalChange}
+              value={userData?.reasonForArrival}
+              onChangeHandler={onChangeHandlerUserData}
             />
           </div>
           <div className="inputs">
-            <PhoneNumber setPhoneNumber={setPhoneNumber} />
+            <PhoneNumber name="phone" setUserData={setUserData} />
           </div>
           <div className="inputs">
             <SelectInput
+              name="HMO"
               labelText="HMO"
               menuItems={HMOdata}
-              value={HMO}
-              onChangeHandler={handleHMOChange}
+              value={userData?.HMO}
+              onChangeHandler={onChangeHandlerUserData}
             />
           </div>
           <div className="inputs">
             <SelectInput
+              name="city"
               labelText="City"
               menuItems={cityData}
-              value={city}
-              onChangeHandler={handleCityChange}
+              value={userData?.city}
+              onChangeHandler={onChangeHandlerUserData}
             />
           </div>
           <div className="authTermsDiv">
@@ -266,7 +253,6 @@ function RegistrationForm(props: IRegistrationFormProps) {
             </p>
           </div>
           <div className="btnControlDiv">
-            
             <Button btnValue="Continue" onClickHandler={onSubmitClick} />
           </div>
         </form>

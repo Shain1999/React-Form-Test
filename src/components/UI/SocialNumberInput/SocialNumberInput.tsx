@@ -19,6 +19,7 @@ function SocialNumberInput(props: ISocialNuberInputProps) {
   return (
     <>
       <Inputs
+      name="socialNumber"
         errorMessage={props.errMessage}
         labelText={props.labelText}
         onChangeHandler={props.onInputChangeHandler}

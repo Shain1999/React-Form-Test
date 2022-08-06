@@ -12,12 +12,10 @@ import React, { ChangeEventHandler } from "react";
 
 export interface IBirthDateProps {
   labelText: string;
-  daysValue: number;
-  mounthsValue: number;
-  yearsValue: number;
-  handleDaysChange: ChangeEventHandler<HTMLInputElement>;
-  handleMounthsChange: ChangeEventHandler<HTMLInputElement>;
-  handleYearsChange: ChangeEventHandler<HTMLInputElement>;
+  daysValue: number | undefined;
+  mounthsValue: number | undefined;
+  yearsValue: number | undefined;
+  setUserData: any;
 }
 // this component recives days mounths and years state value,on change handler for each value,and a title
 // the component returns 3 ddl for the user to fill his birth date
@@ -35,6 +33,7 @@ function BirthDate(props: IBirthDateProps) {
   for (let i = 1948; i < 2023; i++) {
     yearsLabels.push(i.toString());
   }
+
   return (
     <>
       <label>{props.labelText}</label>
@@ -43,7 +42,12 @@ function BirthDate(props: IBirthDateProps) {
           select
           label="dd"
           value={props.daysValue}
-          onChange={props.handleDaysChange}
+          onChange={(e) => {
+            props.setUserData((prev: any) => ({
+              ...prev,
+              dateOfBirth: { ...prev.dateOfBirth, day: e.target.value },
+            }));
+          }}
           sx={{
             width: 150,
 
@@ -64,7 +68,12 @@ function BirthDate(props: IBirthDateProps) {
           select
           label="mm"
           value={props.mounthsValue}
-          onChange={props.handleMounthsChange}
+          onChange={(e) => {
+            props.setUserData((prev: any) => ({
+              ...prev,
+              dateOfBirth: { ...prev.dateOfBirth, mounth: e.target.value },
+            }));
+          }}
           sx={{
             width: 150,
 
@@ -85,7 +94,12 @@ function BirthDate(props: IBirthDateProps) {
           select
           label="yy"
           value={props.yearsValue}
-          onChange={props.handleYearsChange}
+          onChange={(e) => {
+            props.setUserData((prev: any) => ({
+              ...prev,
+              dateOfBirth: { ...prev.dateOfBirth, year: e.target.value },
+            }));
+          }}
           sx={{
             width: 150,
 

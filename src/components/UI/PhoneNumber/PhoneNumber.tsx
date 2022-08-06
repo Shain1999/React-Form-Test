@@ -1,5 +1,6 @@
 import { Autocomplete, Box, TextField } from "@mui/material";
 import React, { ChangeEventHandler, useState } from "react";
+import { IUserRegistrationData } from "../../RegistrationForm/RegistrationForm";
 
 interface CountryType {
   code: string;
@@ -9,16 +10,17 @@ interface CountryType {
 }
 
 export interface IPhoneNumberProps {
-  setPhoneNumber: React.Dispatch<React.SetStateAction<string>>;
+  setUserData: any;
+  name: string;
 }
 // this component recives an set function for the phone number state
 // the component returns one ddl filled with postal code number and one input for the user to insert their number
 function PhoneNumber(props: IPhoneNumberProps) {
   const [errMessagePhoneNumber, setErrMessagePhoneNumber] =
     useState<string>("");
-    function onlyNumbers(str:string) {
-      return /^[0-9]+$/.test(str);
-    }
+  function onlyNumbers(str: string) {
+    return /^[0-9]+$/.test(str);
+  }
   const [valuePostal, setValuePostal] = useState<CountryType>({
     code: "IL",
     label: "Israel",
@@ -79,6 +81,7 @@ function PhoneNumber(props: IPhoneNumberProps) {
           error={errMessagePhoneNumber == "" ? false : true}
           helperText={errMessagePhoneNumber}
           label="enter phone"
+          name={props.name}
           sx={{
             width: 313,
 
@@ -93,7 +96,12 @@ function PhoneNumber(props: IPhoneNumberProps) {
               if (errMessagePhoneNumber != "") {
                 setErrMessagePhoneNumber("");
               }
-              props.setPhoneNumber(`+${valuePostal}${e.target.value}`);
+              props.setUserData((prev:any) => ({
+                ...prev,
+                [e.target.name]: `+${valuePostal}${e.target.value}`,
+              }));
+
+              // props.setPhoneNumber(`+${valuePostal}${e.target.value}`);
             } else {
               setErrMessagePhoneNumber("only numbers");
             }

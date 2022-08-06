@@ -4,8 +4,9 @@ export interface ISelectInputProps {
   menuItems: any[];
   labelText: string;
   placeholderText?: string;
-  value: string;
+  value: string | undefined;
   onChangeHandler: ChangeEventHandler<HTMLInputElement>;
+  name: string;
 }
 export interface IMenuItem {
   label: string;
@@ -17,6 +18,7 @@ function SelectInput(props: ISelectInputProps) {
     <>
       <label>{props.labelText}</label>
       <TextField
+        name={props.name}
         select
         label={props.placeholderText}
         value={props.value}
